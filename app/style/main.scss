@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: #111;
+    color: #fff;
+}
+
+section{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+
+}
+
+nav{
+    background-color: silver;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+a{
+    display: inline-block;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    color: #111;
+    text-decoration: none;
+    font-size: 2rem;
+}
+
+footer{
+    background-color: silver;
+    color: #111;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
