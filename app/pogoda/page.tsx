@@ -6,13 +6,6 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
 
     export default function Profile() {
         const [data2, setDate] = useState(null)
-          const [name, setName] = useState('')
-          const [temp, setTemp] = useState('')
-          const [feels_like, setFeelsLike] = useState('')
-          const [wind_speed, setWindSpeed] = useState('')
-          const [pressure_mm, setPressure_mm] = useState('')
-          const [pogoda, setPogoda] = useState('')
-          const [wind, setWind] = useState('')
           const [counter, setCounter] = useState(false)
           const [text, setText] = useState('Выбрать город')
 
