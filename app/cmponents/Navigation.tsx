@@ -6,8 +6,8 @@ class Navigation extends React.Component{
     render(){
         return(
             <nav>
-             <Links title="Home" link='/'/>
-             <Links title="Pogoda" link='/pogoda'/>
+             <Links title="Главная" link='/'/>
+             <Links title="Погода" link='/pogoda'/>
             </nav>
         )
     }

@@ -15,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <body>
         <section>
           <Navigation />
         {children}
-        <footer>FOOOOOTER</footer>
+        <footer>Подвал</footer>
         </section>
       </body>
     </html>
