@@ -1,137 +1,124 @@
-import style from '../style/modules/Pogoda.module.scss'
-import ButtonSelect from '../cmponents/ui/ButtonSelect';
+'use client'
+import { useState, useEffect } from 'react';
+import styleForm from '../style/modules/Pogoda.module.scss'
+import styleButton from '../style/modules/ButtonSelect.module.scss'
 
 
-async function getData() {
-    // const res = await fetch('https://api.weather.yandex.ru/v2/informers?&X-Yandex-API-Key=9e13767e-c4fa-4e22-8203-3dfb4942eeb3');
-  const key = '9e13767e-c4fa-4e22-8203-3dfb4942eeb3';
-  let url = 'https://api.weather.yandex.ru/v2/forecast?lat=51.442398&lon=36.11241&extra=false&limit=1'
-   const res = await fetch(url,{
-      headers:{ 'X-Yandex-API-Key': key}
-   })
-    return res.json();
-  }
+    export default function Profile() {
+        const [data2, setDate] = useState(null)
+          const [name, setName] = useState('')
+          const [temp, setTemp] = useState('')
+          const [feels_like, setFeelsLike] = useState('')
+          const [wind_speed, setWindSpeed] = useState('')
+          const [pressure_mm, setPressure_mm] = useState('')
+          const [pogoda, setPogoda] = useState('')
+          const [wind, setWind] = useState('')
+          const [counter, setCounter] = useState(false)
+          const [text, setText] = useState('Выбрать город')
 
+          async function fetchData(lat:any,lon:any){
+            let data = await (await fetch(`/api/hello/${lat}&${lon}`)).json()
+            setDate(() => data)
+                console.log(data);
+                
 
-export default async function Pogoda(){
-    const data = await getData();
-  // console.log(data);
-  let pogoda;
-  switch(data.fact.condition){
+            
+        }
+          
+          useEffect(() => {fetchData(55.755864, 37.617698)}, []);
+                   
+            return (
+            <div className={styleForm.item}>
+            <h3>{data2?.geo_object.locality.name}</h3>
+            <div className={styleForm.wrapper}>
+            <p>Температура: <b>{data2?.fact.temp}</b></p>
+              <p>Ощущается: <b>{data2?.fact.feels_like}</b></p>
+              <p>Погода: <b>{switchWeather(data2?.fact.condition)}</b></p>
+              <p>Скорость ветра в секунду: <b>{data2?.fact.wind_speed}</b></p>
+               <p>Направление ветра: <b>{switchWind(data2?.fact.wind_dir)}</b></p>
+               <p>Давление в мм. рт. ст.: <b>{data2?.fact.pressure_mm}</b></p>
+               <p>Давление в Па: <b>{data2?.fact?.pressure_pa}</b></p>
+
+              </div>
+        
+              <div className={styleForm.options}>
+
+            <button className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
+            {counter && 
+                <div className={styleButton.item}>
+                <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), fetchData(51.730846, 36.193015)}} >Курск</p>
+                <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Москва'), fetchData(55.755864, 37.617698)}} >Москва</p>
+                <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Белгород'),  fetchData(50.595414, 36.587277)}}>Белгород</p>
+                <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Шебекино'),  fetchData(50.404345, 36.879317)}}>Шебекино</p>
+                </div>}
+                </div>
+            </div>
+              );
+        }
+
+        function switchWind(val: string): string {
+            switch (val) {
+                    case 'n':
+                      return 'Северное'
+                    case 'ne':
+                      return 'Северо-восточное'
+                    case 'nw':
+                      return 'Северо-заподное'
+                    case 'e':
+                      return 'Восточное'
+                    case 'se':
+                      return 'Юго-Восточное'
+                    case 's':
+                      return 'Южное'
+                    case 'sw':
+                      return 'Юго-заподное'
+                    case 'w':
+                      return 'Заподное'
+                    case 'c':
+                      return 'Штиль'
+                      default: return ''
+                    }
+        }
+
+        function switchWeather(weather: string): string {
+  switch(weather) {
     case 'clear':
-       pogoda = 'Ясно' 
-       break;
+       return 'Ясно' 
     case 'partly-cloudy':
-      pogoda = 'Малооблачно'
-      break;
+      return 'Малооблачно'
     case 'cloudy':
-      pogoda = 'Облачно с прояснениями'
-      break;
+      return 'Облачно с прояснениями'
     case 'overcast':
-      pogoda = 'Пасмурно'
-       break;
+      return 'Пасмурно'
     case 'drizzle':
-       pogoda = 'Морось'
-       break;
+       return 'Морось'
     case 'light-rain':
-      pogoda = 'Небольшой дождь'
-      break;
-
+      return 'Небольшой дождь'
     case 'rain':
-      pogoda = 'Дождь'
-      break;
-
+      return 'Дождь'
     case 'moderate-rain':
-      pogoda = 'Умеренно сильный дождь'
-      break;
-
+      return 'Умеренно сильный дождь'
     case 'heavy-rain':
-      pogoda = 'Сильный дождь'
-      break;
-
+      return 'Сильный дождь'
     case 'continuous-heavy-rain':
-      pogoda = 'Длительный сильный дождь'
-      break;
-
+      return 'Длительный сильный дождь'
     case 'showers':
-      pogoda = 'Ливень'
-      break;
-
+      return 'Ливень'
     case 'wet-snow':
-      pogoda = 'Дождь со снегом'
-      break;
-
+      return 'Дождь со снегом'
     case 'light-snow':
-      pogoda = 'Небольшой снег'
-      break;
-
+      return 'Небольшой снег'
     case 'snow':
-      pogoda = 'Снег'
-      break;
-
+      return 'Снег'
     case 'snow-showers':
-      pogoda = 'Снегопад'
-      break;
-
+      return 'Снегопад'
     case 'hail':
-      pogoda = 'Град'
-      break;
-    
+      return 'Град'
     case 'thunderstorm':
-      pogoda = 'Гроза'
-      break;
-
+      return 'Гроза'
     case 'thunderstorm-with-rain':
-      pogoda = 'Дождь с грозой'
-      break;
-
+      return 'Дождь с грозой'
     case 'thunderstorm-with-hail':
-      pogoda = 'Гроза с градом'
-      break;
-    }
-
-    let naprovlenie;
-    switch (data.fact.wind_dir) {
-    case 'n':
-      naprovlenie = 'Северное'
-      break;
-    case 'ne':
-      naprovlenie = 'Северо-восточное'
-      break;
-    case 'nw':
-      naprovlenie = 'Северо-заподное'
-      break;
-    case 'e':
-      naprovlenie = 'Восточное'
-      break;
-    case 'se':
-      naprovlenie = 'Юго-Восточное'
-      break;
-    case 's':
-      naprovlenie = 'Южное'
-      break;
-    case 'sw':
-      naprovlenie = 'Юго-заподное'
-      break;
-    case 'w':
-      naprovlenie = 'Заподное'
-      break;
-    case 'c':
-      naprovlenie = 'Штиль'
-      break;
-    }
-   
-
-    return <div className={style.item}>
-    <h3>{data.geo_object.province.name}</h3>
-    <div className={style.wrapper}>
-    <p>Температура: <b>{data.fact.temp}</b></p>
-      <p>Ощущается: <b>{data.fact.feels_like}</b></p>
-      <p>Погода: <b>{pogoda}</b></p>
-      <p>Скорость ветра в секунду: <b>{data.fact.wind_speed}</b></p>
-      <p>Направление ветра: <b>{naprovlenie}</b></p>
-      <p>Давление в мм. рт. ст.: <b>{data.fact.pressure_mm}</b></p>
-      </div>
-    <ButtonSelect />
-    </div>
-}
+      return 'Гроза с градом'
+      default: return ''
+    }}
