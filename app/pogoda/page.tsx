@@ -31,12 +31,14 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                   (
                     item.hours.map(item =>(
                     
+                      <>
                       <div key={item.hour}>
                         <h3>Время: {item.hour}:00</h3>
-                        <p>{switchWeather(item.condition)}</p>
-                        
+                        <p>Температура: <b>{data2?.fact.temp}</b></p>
+                        <br />
+                        <p><b>{switchWeather(item.condition)}</b></p>
                       </div>
-                    
+                      </>
                       )
                     )
                   )
@@ -67,15 +69,16 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                         <button className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</button>
 
                         <button className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
-                      </div>
-                    </div>
-                    {counter && 
+                        {counter && 
                   <div className={styleButton.item}>
                     <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), fetchData(51.730846, 36.193015)}} >Курск</p>
                     <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Москва'), fetchData(55.755864, 37.617698)}} >Москва</p>
                     <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Белгород'),  fetchData(50.595414, 36.587277)}}>Белгород</p>
                     <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Шебекино'),  fetchData(50.404345, 36.879317)}}>Шебекино</p>
                   </div>}
+                      </div>
+                    </div>
+                   
                   </div>
               </div>
               }
