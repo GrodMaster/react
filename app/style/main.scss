@@ -47,6 +47,19 @@ section{
     min-height: 100vh;
 }
 
+.rows{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
 
+label{
+    box-sizing: border-box;
+    margin: 1rem;
+}
 
+input{
+    box-sizing: border-box;
+    margin: 1rem;
+}
 
