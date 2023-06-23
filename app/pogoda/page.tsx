@@ -63,9 +63,11 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                     </div>
               
                     <div className={styleForm.options}>
-                    <button className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</button>
+                      <div className={styleButton.groupBtn}>
+                        <button className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</button>
 
-                      <button className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
+                        <button className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
+                      </div>
                     </div>
                     {counter && 
                   <div className={styleButton.item}>

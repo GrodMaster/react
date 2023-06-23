@@ -3,7 +3,8 @@
     color: black;
     border: none;
     border-radius: 5px;
-    width: 100%;
+    width: 10rem;
+    text-align: center;
 }
 
 .btnp{
@@ -23,6 +24,7 @@
 .btn{
 font-size: 1rem;
 padding: .5rem;
+margin: .5rem;
 color: white;
 background-color: rgb(0, 0, 0);
 border: none;
@@ -48,4 +50,10 @@ cursor: pointer;
     display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.groupBtn{
+    display: flex;
+    flex-direction: column;
+
 }
