@@ -9,7 +9,8 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
           const [counter, setCounter] = useState(false)
           const [text, setText] = useState('Выбрать город')
           const [section, setSection] = useState(false)
-
+          const [time, setTime] = useState(null)
+          console.log(time)
           async function fetchData(lat:any,lon:any){
             let data = await (await fetch(`/api/hello/${lat}&${lon}`)).json()
             setDate(() => data)
@@ -24,13 +25,14 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                    
             return (
             <>
+            {/* todo: item.hour*/}
               {section && !counter &&
                 <>
                 <div className={styleForm.columns}>
                 {data2?.forecasts.map(item=>
                   (
                     item.hours.map(item =>(
-                        <div key={item.hour_ts}>
+                        <div key={item.hour_ts} onClick={()=>{setTime(()=>item.hour)}}>
                           <h3>Время: {item.hour}:00</h3>
                           <p>Температура: <b>{data2?.fact.temp}</b></p>
                           <br />
