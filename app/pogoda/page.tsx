@@ -30,15 +30,12 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                 {data2?.forecasts.map(item=>
                   (
                     item.hours.map(item =>(
-                    
-                      <>
-                      <div key={item.hour}>
-                        <h3>Время: {item.hour}:00</h3>
-                        <p>Температура: <b>{data2?.fact.temp}</b></p>
-                        <br />
-                        <p><b>{switchWeather(item.condition)}</b></p>
-                      </div>
-                      </>
+                        <div key={item.hour_ts}>
+                          <h3>Время: {item.hour}:00</h3>
+                          <p>Температура: <b>{data2?.fact.temp}</b></p>
+                          <br />
+                          <p><b>{switchWeather(item.condition)}</b></p>
+                        </div>
                       )
                     )
                   )
