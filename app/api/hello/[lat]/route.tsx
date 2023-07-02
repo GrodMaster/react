@@ -10,7 +10,7 @@ export async function GET(req: Request){
 
 async function getData(lat:string, lon:string) {
 
-const key = '9e13767e-c4fa-4e22-8203-3dfb4942eeb3';
+const key = 'e756c7ea-8334-4b5a-9831-9ddede051bf6';
 let url = `https://api.weather.yandex.ru/v2/forecast?lat=${lat}&lon=${lon}&extra=false&limit=1`;
 console.log(url);
 
