@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import styleForm from '../style/modules/Pogoda.module.scss'
 import styleButton from '../style/modules/ButtonSelect.module.scss'
+import Loading from './loading';
 
 
     export default function Profile() {
@@ -26,7 +27,8 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                    
             return (
             <>
-            {/* todo: item.hour*/}
+            {!data2 && <Loading/>}
+            {data2 && <>
             {item &&
             <div>
               {data2.forecasts.map(item=>(
@@ -113,16 +115,13 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                    
                   </div>
               </div>
-              }
-              
-              
-                    
+              }  </>}
               
             </>
 
               );}
 
-  function powerPrecipitation(item:any){
+  function powerPrecipitation(item:number):string{
     switch(item){
       case 0:
         return 'без осадков'
@@ -134,10 +133,11 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
         return 'сильный дождь/сильный снег'
       case 1:
         return 'сильный ливень/очень сильный снег'
+      default: return ''
     }
   }
             
-  function cloudCover(item: any):any {
+  function cloudCover(item: number):string {
     switch (item) {
       case 0:
         return 'ясно'
@@ -149,34 +149,35 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
         return 'облачно с прояснениями'
       case 1:
         return 'пасмурно'
+      default: return ''
     }
   }
 
   function switchWind(val: string): string {
-      switch (val) {
-              case 'n':
-                return 'Северное'
-              case 'ne':
-                return 'Северо-восточное'
-              case 'nw':
-                return 'Северо-заподное'
-              case 'e':
-                return 'Восточное'
-              case 'se':
-                return 'Юго-Восточное'
-              case 's':
-                return 'Южное'
-              case 'sw':
-                return 'Юго-заподное'
-              case 'w':
-                return 'Заподное'
-              case 'c':
-                return 'Штиль'
-                default: return ''
-              }
+    switch (val) {
+      case 'n':
+        return 'Северное'
+      case 'ne':
+        return 'Северо-восточное'
+      case 'nw':
+        return 'Северо-заподное'
+      case 'e':
+        return 'Восточное'
+      case 'se':
+        return 'Юго-Восточное'
+      case 's':
+        return 'Южное'
+      case 'sw':
+        return 'Юго-заподное'
+      case 'w':
+        return 'Заподное'
+      case 'c':
+        return 'Штиль'
+        default: return ''
+    }
   }
 
-  function precipitation(item:any):any{
+  function precipitation(item:number):string{
     switch(item){
       case 0:
         return 'без осадков'
@@ -186,6 +187,7 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
         return 'дождь со снегом'
       case 3:
         return 'снег'
+        default: return ''
     }
   }
 
