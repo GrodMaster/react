@@ -20,7 +20,7 @@ export default function RootLayout({
         <section>
           <Navigation />
         {children}
-        <footer>Подвал</footer>
+        <footer>&copy; Люди редко добиваются успеха, если заняты тем, что не доставляет им удовольствия.</footer>
         </section>
       </body>
     </html>
