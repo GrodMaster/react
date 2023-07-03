@@ -22,7 +22,7 @@ export default function buttons(){
     return(
     <div className={style.options}>
 
-        <button className={style.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
+        <div className={style.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</div>
         {counter && 
         <div className={style.item}>
         <p className={style.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), setId(0)}} >Курск</p>

@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react';
 import styleForm from '../style/modules/Pogoda.module.scss'
-import styleButton from '../style/modules/ButtonSelect.module.scss'
+import styleButton  from '../style/modules/ButtonSelect.module.scss'
 import Loading from './loading';
 
 
     export default function Profile() {
-        const [data2, setDate] = useState(null)
+        const [data2, setDate] = useState<any>(null)
           const [counter, setCounter] = useState(false)
           const [text, setText] = useState('Выбрать город')
           const [section, setSection] = useState(false)
-          const [time, setTime] = useState(null)
+          const [time, setTime] = useState(0)
           const [item, setItem] = useState(false)
           
           async function fetchData(lat:any,lon:any){
@@ -31,7 +31,7 @@ import Loading from './loading';
             {data2 && <>
             {item &&
             <div>
-              {data2.forecasts.map(item=>(
+              {data2?.forecasts.map((item: { hours: { [ x: string ]: any; }; })=>(
                 
                 <div key={item.hours[time].hour_ts} className={styleForm.item}>
                   <h3>Подробная информация о погоде на : {item.hours[time].hour}:00</h3>
@@ -49,9 +49,9 @@ import Loading from './loading';
                   <p>Тип осадков: <b>{precipitation(item.hours[time].prec_type)}</b></p>
                   <p>Сила осадков: <b>{powerPrecipitation(item.hours[time].prec_strength)}</b></p>
                   <p>Облачность: <b>{cloudCover(item.hours[time].cloudness)}</b></p>
-                  {console.log(item.hours[time])}
+                  {/* {console.log(item.hours[time])} */}
                   </div>
-                  <button className={styleButton.btn} onClick={()=>{setItem((e)=> e != true)}}>Назад</button>
+                  <div className={styleButton.btn} onClick={()=>{setItem((e)=> e != true)}}>Назад</div>
                 </div>
               ))}
             </div>
@@ -61,7 +61,7 @@ import Loading from './loading';
               !item &&
                 <>
                 <div className={styleForm.columns}>
-                {data2?.forecasts.map(item=>
+                {data2?.forecasts.map((item: { hours: any[]; })=>
                   (
                     item.hours.map(item =>(
                         <div key={item.hour_ts} 
@@ -78,7 +78,7 @@ import Loading from './loading';
                 )}
                 
                 </div>
-                <button className={styleButton.btnp} onClick={()=>setSection((e)=> e !=true)}>На весь день</button>
+                <div className={styleButton.btnp} onClick={()=>setSection((e)=> e !=true)}>На весь день</div>
 
               </>
               }
@@ -100,9 +100,9 @@ import Loading from './loading';
               
                     <div className={styleForm.options}>
                       <div className={styleButton.groupBtn}>
-                        <button className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</button>
+                        <div className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</div>
 
-                        <button className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</button>
+                        <div className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</div>
                         {counter && 
                   <div className={styleButton.item}>
                     <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), fetchData(51.730846, 36.193015)}} >Курск</p>
