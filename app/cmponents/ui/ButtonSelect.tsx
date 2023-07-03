@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 import style from '../../style/modules/ButtonSelect.module.scss'
 import { useState } from "react"
