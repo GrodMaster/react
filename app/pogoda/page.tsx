@@ -10,7 +10,8 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
           const [text, setText] = useState('Выбрать город')
           const [section, setSection] = useState(false)
           const [time, setTime] = useState(null)
-          console.log(time)
+          const [item, setItem] = useState(false)
+          
           async function fetchData(lat:any,lon:any){
             let data = await (await fetch(`/api/hello/${lat}&${lon}`)).json()
             setDate(() => data)
@@ -26,17 +27,48 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
             return (
             <>
             {/* todo: item.hour*/}
-              {section && !counter &&
+            {item &&
+            <div>
+              {data2.forecasts.map(item=>(
+                
+                <div key={item.hours[time].hour_ts} className={styleForm.item}>
+                  <h3>Подробная информация о погоде на : {item.hours[time].hour}:00</h3>
+                  <div  className={styleForm.wrapper}>
+                  <p>Тепература: <b>{item.hours[time].temp}</b></p>
+                  <p>Ощущается как: <b>{item.hours[time].feels_like}</b></p>
+                  <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${item.hours[time].icon}.svg`} /></p>
+                  <p>Скорость ветра(в м/с): <b>{item.hours[time].wind_speed}</b></p>
+                  <p>Скорость порывов ветра (в м/с): <b>{item.hours[time].wind_gust}</b></p>
+                  <p>Напровление ветра: <b>{switchWind(item.hours[time].wind_dir)}</b></p>
+                  <p>Давление (в мм.рт.ст.): <b>{item.hours[time].pressure_mm}</b></p>
+                  <p>Давление (в гектопаскалях): <b>{item.hours[time].pressure_pa}</b></p>
+                  <p>Влажность воздуха (в процентах): <b>{item.hours[time].humidity}</b></p>
+                  <p>Прогнозируемое количество осадков (в мм): <b>{item.hours[time].prec_mm}</b></p>
+                  <p>Тип осадков: <b>{precipitation(item.hours[time].prec_type)}</b></p>
+                  <p>Сила осадков: <b>{powerPrecipitation(item.hours[time].prec_strength)}</b></p>
+                  <p>Облачность: <b>{cloudCover(item.hours[time].cloudness)}</b></p>
+                  {console.log(item.hours[time])}
+                  </div>
+                  <button className={styleButton.btn} onClick={()=>{setItem((e)=> e != true)}}>Назад</button>
+                </div>
+              ))}
+            </div>
+            }
+
+              {section && !counter && 
+              !item &&
                 <>
                 <div className={styleForm.columns}>
                 {data2?.forecasts.map(item=>
                   (
                     item.hours.map(item =>(
-                        <div key={item.hour_ts} onClick={()=>{setTime(()=>item.hour)}}>
+                        <div key={item.hour_ts} 
+                        onClick={()=>{setTime(()=>item.hour), setItem((e)=> e != true)}}
+                        >
                           <h3>Время: {item.hour}:00</h3>
-                          <p>Температура: <b>{data2?.fact.temp}</b></p>
+                          <p>Температура: <b>{item.temp}</b></p>
                           <br />
-                          <p><b>{switchWeather(item.condition)}</b></p>
+                          <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${item.icon}.svg`} /></p>
                         </div>
                       )
                     )
@@ -55,7 +87,8 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
                     <div className={styleForm.wrapper}>
                       <p>Температура: <b>{data2?.fact.temp}</b></p>
                       <p>Ощущается: <b>{data2?.fact.feels_like}</b></p>
-                      <p>Погода: <b>{switchWeather(data2?.fact.condition)}</b></p>
+                      <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${data2?.fact.icon}.svg`} /> <b>{switchWeather(data2?.fact.condition)}</b></p>
+                      
                       <p>Скорость ветра в секунду: <b>{data2?.fact.wind_speed}</b></p>
                       <p>Направление ветра: <b>{switchWind(data2?.fact.wind_dir)}</b></p>
                       <p>Давление в мм. рт. ст.: <b>{data2?.fact.pressure_mm}</b></p>
@@ -88,71 +121,114 @@ import styleButton from '../style/modules/ButtonSelect.module.scss'
             </>
 
               );}
+
+  function powerPrecipitation(item:any){
+    switch(item){
+      case 0:
+        return 'без осадков'
+      case 0.25:
+        return 'слабый дождь/слабый снег'
+      case 0.5:
+        return 'дождь/снег'
+      case 0.75:
+        return 'сильный дождь/сильный снег'
+      case 1:
+        return 'сильный ливень/очень сильный снег'
+    }
+  }
             
+  function cloudCover(item: any):any {
+    switch (item) {
+      case 0:
+        return 'ясно'
+      case 0.25:
+        return 'малооблачно'
+      case 0.5:
+        return 'облачно с прояснениями'
+      case 0.75:
+        return 'облачно с прояснениями'
+      case 1:
+        return 'пасмурно'
+    }
+  }
 
-        function switchWind(val: string): string {
-            switch (val) {
-                    case 'n':
-                      return 'Северное'
-                    case 'ne':
-                      return 'Северо-восточное'
-                    case 'nw':
-                      return 'Северо-заподное'
-                    case 'e':
-                      return 'Восточное'
-                    case 'se':
-                      return 'Юго-Восточное'
-                    case 's':
-                      return 'Южное'
-                    case 'sw':
-                      return 'Юго-заподное'
-                    case 'w':
-                      return 'Заподное'
-                    case 'c':
-                      return 'Штиль'
-                      default: return ''
-                    }
-        }
+  function switchWind(val: string): string {
+      switch (val) {
+              case 'n':
+                return 'Северное'
+              case 'ne':
+                return 'Северо-восточное'
+              case 'nw':
+                return 'Северо-заподное'
+              case 'e':
+                return 'Восточное'
+              case 'se':
+                return 'Юго-Восточное'
+              case 's':
+                return 'Южное'
+              case 'sw':
+                return 'Юго-заподное'
+              case 'w':
+                return 'Заподное'
+              case 'c':
+                return 'Штиль'
+                default: return ''
+              }
+  }
 
-        function switchWeather(weather: string): string {
-  switch(weather) {
-    case 'clear':
-       return 'Ясно' 
-    case 'partly-cloudy':
-      return 'Малооблачно'
-    case 'cloudy':
-      return 'Облачно с прояснениями'
-    case 'overcast':
-      return 'Пасмурно'
-    case 'drizzle':
-       return 'Морось'
-    case 'light-rain':
-      return 'Небольшой дождь'
-    case 'rain':
-      return 'Дождь'
-    case 'moderate-rain':
-      return 'Умеренно сильный дождь'
-    case 'heavy-rain':
-      return 'Сильный дождь'
-    case 'continuous-heavy-rain':
-      return 'Длительный сильный дождь'
-    case 'showers':
-      return 'Ливень'
-    case 'wet-snow':
-      return 'Дождь со снегом'
-    case 'light-snow':
-      return 'Небольшой снег'
-    case 'snow':
-      return 'Снег'
-    case 'snow-showers':
-      return 'Снегопад'
-    case 'hail':
-      return 'Град'
-    case 'thunderstorm':
-      return 'Гроза'
-    case 'thunderstorm-with-rain':
-      return 'Дождь с грозой'
-    case 'thunderstorm-with-hail':
-      return 'Гроза с градом'
-      default: return ''
-    }}
+  function precipitation(item:any):any{
+    switch(item){
+      case 0:
+        return 'без осадков'
+      case 1:
+        return 'дождь'
+      case 2:
+        return 'дождь со снегом'
+      case 3:
+        return 'снег'
+    }
+  }
+
+  function switchWeather(weather: string): string {
+    switch(weather) {
+      case 'clear':
+        return 'Ясно' 
+      case 'partly-cloudy':
+        return 'Малооблачно'
+      case 'cloudy':
+        return 'Облачно с прояснениями'
+      case 'overcast':
+        return 'Пасмурно'
+      case 'drizzle':
+        return 'Морось'
+      case 'light-rain':
+        return 'Небольшой дождь'
+      case 'rain':
+        return 'Дождь'
+      case 'moderate-rain':
+        return 'Умеренно сильный дождь'
+      case 'heavy-rain':
+        return 'Сильный дождь'
+      case 'continuous-heavy-rain':
+        return 'Длительный сильный дождь'
+      case 'showers':
+        return 'Ливень'
+      case 'wet-snow':
+        return 'Дождь со снегом'
+      case 'light-snow':
+        return 'Небольшой снег'
+      case 'snow':
+        return 'Снег'
+      case 'snow-showers':
+        return 'Снегопад'
+      case 'hail':
+        return 'Град'
+      case 'thunderstorm':
+        return 'Гроза'
+      case 'thunderstorm-with-rain':
+        return 'Дождь с грозой'
+      case 'thunderstorm-with-hail':
+        return 'Гроза с градом'
+        default: return ''
+    }
+  }
