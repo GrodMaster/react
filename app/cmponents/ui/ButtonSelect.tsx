@@ -1,10 +1,11 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 import style from '../../style/modules/ButtonSelect.module.scss'
 import { useState } from "react"
 
 export default function buttons(){
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [counter, setCounter] = useState(false)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [text, setText] = useState('Выбрать город')
     async function setId(num: number){
         if (num === 0) {
