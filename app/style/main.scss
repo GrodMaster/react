@@ -43,7 +43,9 @@ body{
         justify-content: center;
     }
 }
-
+.text{
+    margin: 15px;
+}
 section{
     display: grid;
     grid-template-rows: auto 1fr auto;

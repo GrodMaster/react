@@ -20,7 +20,11 @@ export default function RootLayout({
         <section>
           <Navigation />
         {children}
-        <footer>&copy; Люди редко добиваются успеха, если заняты тем, что не доставляет им удовольствия.</footer>
+        <footer>
+        
+          <div className='text'>&copy; Люди редко добиваются успеха, если заняты тем, что не доставляет им удовольствия.</div>
+        
+        </footer>
         </section>
       </body>
     </html>
