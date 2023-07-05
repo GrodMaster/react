@@ -1,126 +1,137 @@
 'use client'
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import styleForm from '../style/modules/Pogoda.module.scss'
 import styleButton  from '../style/modules/ButtonSelect.module.scss'
 import Loading from './loading';
 
 
-    export default function Profile() {
-        const [data2, setDate] = useState<any>(null)
-          const [counter, setCounter] = useState(false)
-          const [text, setText] = useState('Выбрать город')
-          const [section, setSection] = useState(false)
-          const [time, setTime] = useState(0)
-          const [item, setItem] = useState(false)
+export default function Profile() {
+  const [data2, setDate] = useState<any>(null)
+  const [counter, setCounter] = useState(false)
+  const [text, setText] = useState('Выбрать город')
+  const [section, setSection] = useState(false)
+  const [time, setTime] = useState(0)
+  const [item, setItem] = useState(false)
+  
+  async function fetchData(lat:any,lon:any){
+    let data = await (await fetch(`/api/hello/${lat}&${lon}`)).json()
+    setDate(() => data)
+          console.log(data);
           
-          async function fetchData(lat:any,lon:any){
-            let data = await (await fetch(`/api/hello/${lat}&${lon}`)).json()
-            setDate(() => data)
-                 console.log(data);
-                
-            
-            
-            
-        }
+      
+      
+      
+  }
           
-          useEffect(() => {fetchData(55.755864, 37.617698)}, []);
-                   
-            return (
-            <>
-            {!data2 && <Loading/>}
-            {data2 && <>
-            {item &&
-            <div>
-              {data2?.forecasts.map((item: { hours: { [ x: string ]: any; }; })=>(
-                
-                <div key={item.hours[time].hour_ts} className={styleForm.item}>
-                  <h3>Подробная информация о погоде на : {item.hours[time].hour}:00</h3>
-                  <div  className={styleForm.wrapper}>
-                  <p>Тепература: <b>{item.hours[time].temp}</b></p>
-                  <p>Ощущается как: <b>{item.hours[time].feels_like}</b></p>
-                  <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${item.hours[time].icon}.svg`} /></p>
-                  <p>Скорость ветра(в м/с): <b>{item.hours[time].wind_speed}</b></p>
-                  <p>Скорость порывов ветра (в м/с): <b>{item.hours[time].wind_gust}</b></p>
-                  <p>Напровление ветра: <b>{switchWind(item.hours[time].wind_dir)}</b></p>
-                  <p>Давление (в мм.рт.ст.): <b>{item.hours[time].pressure_mm}</b></p>
-                  <p>Давление (в гектопаскалях): <b>{item.hours[time].pressure_pa}</b></p>
-                  <p>Влажность воздуха (в процентах): <b>{item.hours[time].humidity}</b></p>
-                  <p>Прогнозируемое количество осадков (в мм): <b>{item.hours[time].prec_mm}</b></p>
-                  <p>Тип осадков: <b>{precipitation(item.hours[time].prec_type)}</b></p>
-                  <p>Сила осадков: <b>{powerPrecipitation(item.hours[time].prec_strength)}</b></p>
-                  <p>Облачность: <b>{cloudCover(item.hours[time].cloudness)}</b></p>
-                  {/* {console.log(item.hours[time])} */}
-                  </div>
-                  <div className={styleButton.btn} onClick={()=>{setItem((e)=> e != true)}}>Назад</div>
-                </div>
-              ))}
+  useEffect(() => {fetchData(55.755864, 37.617698)}, []);
+
+  function weatherDetails(data2:any){
+    return (<div>
+      {data2?.forecasts.map((item: { hours: { [ x: string ]: any; }; })=>(
+        
+        <div key={item.hours[time].hour_ts} className={styleForm.item}>
+          <h3>Подробная информация о погоде на : {item.hours[time].hour}:00</h3>
+          <div  className={styleForm.wrapper}>
+          <p>Тепература: <b>{item.hours[time].temp}</b></p>
+          <p>Ощущается как: <b>{item.hours[time].feels_like}</b></p>
+          <p>Погода: 
+            <Image 
+            src={`https://yastatic.net/weather/i/icons/funky/dark/${item.hours[time].icon}.svg`} 
+            alt='img' 
+            width={20}
+            height={20}/></p>
+          <p>Скорость ветра(в м/с): <b>{item.hours[time].wind_speed}</b></p>
+          <p>Скорость порывов ветра (в м/с): <b>{item.hours[time].wind_gust}</b></p>
+          <p>Напровление ветра: <b>{switchWind(item.hours[time].wind_dir)}</b></p>
+          <p>Давление (в мм.рт.ст.): <b>{item.hours[time].pressure_mm}</b></p>
+          <p>Давление (в гектопаскалях): <b>{item.hours[time].pressure_pa}</b></p>
+          <p>Влажность воздуха (в процентах): <b>{item.hours[time].humidity}</b></p>
+          <p>Прогнозируемое количество осадков (в мм): <b>{item.hours[time].prec_mm}</b></p>
+          <p>Тип осадков: <b>{precipitation(item.hours[time].prec_type)}</b></p>
+          <p>Сила осадков: <b>{powerPrecipitation(item.hours[time].prec_strength)}</b></p>
+          <p>Облачность: <b>{cloudCover(item.hours[time].cloudness)}</b></p>
+          {/* {console.log(item.hours[time])} */}
+          </div>
+          <div className={styleButton.btn} onClick={()=>{setItem((e)=> e != true)}}>Назад</div>
+        </div>
+      ))}
+    </div>)
+  }
+
+
+  function weatherToDay(data2:any){     
+    return(           <>
+    <div className={styleForm.columns}>
+    {data2?.forecasts.map((item: { hours: any[]; })=>
+      (
+        item.hours.map(item =>(
+            <div key={item.hour_ts} 
+            onClick={()=>{setTime(()=>item.hour), setItem((e)=> e != true)}}
+            >
+              <h3>Время: {item.hour}:00</h3>
+              <p>Температура: <b>{item.temp}</b></p>
+              <br />
+              <p>Погода: 
+                <Image 
+                src={`https://yastatic.net/weather/i/icons/funky/dark/${item.icon}.svg`} 
+                alt='img'
+                width={20}
+                height={20}/></p>
             </div>
-            }
+          )
+        )
+      )
+    )}
+    
+    </div>
+    <div className={styleButton.btnp} onClick={()=>setSection((e)=> e !=true)}>На весь день</div>
 
-              {section && !counter && 
-              !item &&
-                <>
-                <div className={styleForm.columns}>
-                {data2?.forecasts.map((item: { hours: any[]; })=>
-                  (
-                    item.hours.map(item =>(
-                        <div key={item.hour_ts} 
-                        onClick={()=>{setTime(()=>item.hour), setItem((e)=> e != true)}}
-                        >
-                          <h3>Время: {item.hour}:00</h3>
-                          <p>Температура: <b>{item.temp}</b></p>
-                          <br />
-                          <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${item.icon}.svg`} /></p>
-                        </div>
-                      )
-                    )
-                  )
-                )}
-                
-                </div>
-                <div className={styleButton.btnp} onClick={()=>setSection((e)=> e !=true)}>На весь день</div>
+  </>)}
 
-              </>
-              }
-              { !section &&
-                <div>
-                  <div className={styleForm.item}>
-                    <h3>{data2?.geo_object.locality.name}</h3>
-                    <div className={styleForm.wrapper}>
-                      <p>Температура: <b>{data2?.fact.temp}</b></p>
-                      <p>Ощущается: <b>{data2?.fact.feels_like}</b></p>
-                      <p>Погода: <img src={`https://yastatic.net/weather/i/icons/funky/dark/${data2?.fact.icon}.svg`} /> <b>{switchWeather(data2?.fact.condition)}</b></p>
-                      
-                      <p>Скорость ветра в секунду: <b>{data2?.fact.wind_speed}</b></p>
-                      <p>Направление ветра: <b>{switchWind(data2?.fact.wind_dir)}</b></p>
-                      <p>Давление в мм. рт. ст.: <b>{data2?.fact.pressure_mm}</b></p>
-                      <p>Давление в Па: <b>{data2?.fact?.pressure_pa}</b></p>
 
-                    </div>
-              
-                    <div className={styleForm.options}>
-                      <div className={styleButton.groupBtn}>
-                        <div className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</div>
+  function weatherAll(data2:any){
+    return(<div>
+      <div className={styleForm.item}>
+        <h3>{data2?.geo_object.locality.name}</h3>
+        <div className={styleForm.wrapper}>
+          <p>Температура: <b>{data2?.fact.temp}</b></p>
+          <p>Ощущается: <b>{data2?.fact.feels_like}</b></p>
+          <p>Погода: 
+            <Image 
+            src={`https://yastatic.net/weather/i/icons/funky/dark/${data2?.fact.icon}.svg`}
+            alt='img'
+            width={20}
+            height={20}
+              /> <b>{switchWeather(data2?.fact.condition)}</b></p>
+          
+          <p>Скорость ветра в секунду: <b>{data2?.fact.wind_speed}</b></p>
+          <p>Направление ветра: <b>{switchWind(data2?.fact.wind_dir)}</b></p>
+          <p>Давление в мм. рт. ст.: <b>{data2?.fact.pressure_mm}</b></p>
+          <p>Давление в Па: <b>{data2?.fact?.pressure_pa}</b></p>
 
-                        <div className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</div>
-                        {counter && 
-                  <div className={styleButton.item}>
-                    <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), fetchData(51.730846, 36.193015)}} >Курск</p>
-                    <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Москва'), fetchData(55.755864, 37.617698)}} >Москва</p>
-                    <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Белгород'),  fetchData(50.595414, 36.587277)}}>Белгород</p>
-                    <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Шебекино'),  fetchData(50.404345, 36.879317)}}>Шебекино</p>
-                  </div>}
-                      </div>
-                    </div>
-                   
-                  </div>
-              </div>
-              }  </>}
-              
-            </>
+        </div>
+  
+        <div className={styleForm.options}>
+          <div className={styleButton.groupBtn}>
+            <div className={styleButton.btn} onClick={()=>setSection((e)=> e !=true)}>Подробно на сегодня</div>
 
-              );}
+            <div className={styleButton.btn} onClick={()=>{setCounter((e)=> e != true)}}>{text}</div>
+            {counter && 
+      <div className={styleButton.item}>
+        <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Курск'), fetchData(51.730846, 36.193015)}} >Курск</p>
+        <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Москва'), fetchData(55.755864, 37.617698)}} >Москва</p>
+        <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Белгород'),  fetchData(50.595414, 36.587277)}}>Белгород</p>
+        <p className={styleButton.par} onClick={()=>{setCounter((e)=> e != true), setText(()=> 'Шебекино'),  fetchData(50.404345, 36.879317)}}>Шебекино</p>
+      </div>}
+          </div>
+        </div>
+        
+      </div>
+  </div>)
+  }
 
+  
   function powerPrecipitation(item:number):string{
     switch(item){
       case 0:
@@ -234,3 +245,27 @@ import Loading from './loading';
         default: return ''
     }
   }
+  return (
+    <>
+      {!data2 && <Loading/>}
+
+      {data2 && 
+        <>
+        {item &&
+        weatherDetails(data2)
+        }
+
+        {section && !counter && !item &&
+        weatherToDay(data2)
+        }
+
+        {!section &&
+          weatherAll(data2)
+        }  
+        </>
+      }
+    </>
+
+  );
+}
+
