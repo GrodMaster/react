@@ -17,8 +17,8 @@ export default function Contact() {
       port: 587,
       secure: false,
       auth: {
-        user: 'grodmaster2517@gmail.com', // Замените на свою почту
-        pass: 'voron2517', // Замените на свой пароль
+        user: '', // Замените на свою почту
+        pass: '', // Замените на свой пароль
       },
     });
 
